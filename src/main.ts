@@ -1,52 +1,106 @@
-import { parseMarkdown, renderMarkdownFile } from "./services/markdownService";
+import { renderMarkdownFile } from "./services/markdownService";
+import { listMdFiles, getFileName } from "./services/sidebarService";
 
 window.addEventListener("DOMContentLoaded", () => {
-  const inputEl = document.querySelector<HTMLInputElement>("#markdown-input");
-  const renderArea = document.querySelector<HTMLDivElement>("#render-area");
-  const openBtn = document.querySelector<HTMLButtonElement>("#open-btn");
+  // --- Elementos ---
+  const sidebar      = document.querySelector<HTMLElement>("#sidebar")!;
+  const toggleBtn    = document.querySelector<HTMLButtonElement>("#toggle-btn")!;
+  const pathInput    = document.querySelector<HTMLInputElement>("#path-input")!;
+  const loadBtn      = document.querySelector<HTMLButtonElement>("#load-btn")!;
+  const fileList     = document.querySelector<HTMLUListElement>("#file-list")!;
+  const renderArea   = document.querySelector<HTMLDivElement>("#render-area")!;
 
-  if (!inputEl || !renderArea) return;
+  // --- Estado ---
+  let activeItem: HTMLLIElement | null = null;
 
-  const isFilePath = (value: string): boolean => {
-    const trimmed = value.trim();
-    return trimmed.startsWith("/") || trimmed.startsWith("~") || trimmed.startsWith("./");
-  };
+  // ==========================================
+  // TOGGLE SIDEBAR
+  // ==========================================
+  toggleBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
 
-  const showPlaceholder = () => {
-    renderArea.innerHTML = "<p style='color: #999; text-align: center;'>Aguardando entrada...</p>";
-  };
+  // ==========================================
+  // RENDERIZAR ARQUIVO
+  // ==========================================
+  async function openFile(fullPath: string, listItem?: HTMLLIElement) {
+    // Atualizar item ativo na lista
+    if (activeItem) activeItem.classList.remove("active");
+    if (listItem) {
+      listItem.classList.add("active");
+      activeItem = listItem;
+    }
 
-  const showError = (msg: string) => {
-    renderArea.innerHTML = `<p style='color: #c0392b; text-align: center;'>${msg}</p>`;
-  };
+    renderArea.innerHTML = `<p class="placeholder-text">Carregando...</p>`;
 
-  const handleOpen = async () => {
-    const value = inputEl.value.trim();
-    if (value === "") {
-      showPlaceholder();
+    try {
+      await renderMarkdownFile(fullPath);
+    } catch {
+      renderArea.innerHTML = `<p class="error-text">Não foi possível abrir: ${fullPath}</p>`;
+    }
+  }
+
+  // ==========================================
+  // POPULAR LISTA DE ARQUIVOS
+  // ==========================================
+  async function loadFolder(folderPath: string) {
+    fileList.innerHTML = `<li class="file-list-empty">Carregando...</li>`;
+
+    const files = await listMdFiles(folderPath);
+
+    if (files.length === 0) {
+      fileList.innerHTML = `<li class="file-list-empty">Nenhum arquivo .md encontrado</li>`;
       return;
     }
 
-    if (isFilePath(value)) {
-      try {
-        await renderMarkdownFile(value);
-      } catch {
-        showError(`Não foi possível abrir o arquivo: ${value}`);
-      }
-    } else {
-      const html = await parseMarkdown(value);
-      renderArea.innerHTML = html;
+    fileList.innerHTML = "";
+
+    files.forEach((filePath) => {
+      const li = document.createElement("li");
+      li.className = "file-item";
+      li.title = filePath;
+
+      // Ícone de arquivo
+      const icon = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>`;
+
+      li.innerHTML = `${icon}<span>${getFileName(filePath)}</span>`;
+
+      li.addEventListener("click", () => openFile(filePath, li));
+      fileList.appendChild(li);
+    });
+
+    // Abrir o primeiro arquivo automaticamente
+    const firstItem = fileList.querySelector<HTMLLIElement>(".file-item");
+    if (firstItem) {
+      openFile(files[0], firstItem);
     }
-  };
+  }
 
-  // Botão de pesquisa
-  openBtn?.addEventListener("click", handleOpen);
+  // ==========================================
+  // HANDLER DO INPUT
+  // ==========================================
+  async function handleLoad() {
+    const value = pathInput.value.trim();
+    if (!value) return;
 
-  // Enter no campo de texto
-  inputEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") handleOpen();
+    // Se termina com .md → abrir arquivo direto
+    if (value.endsWith(".md")) {
+      // Limpar lista atual
+      fileList.innerHTML = `<li class="file-list-empty">Arquivo avulso</li>`;
+      activeItem = null;
+      await openFile(value);
+    } else {
+      // Tratar como pasta
+      await loadFolder(value);
+    }
+  }
+
+  loadBtn.addEventListener("click", handleLoad);
+  pathInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleLoad();
   });
-
-  showPlaceholder();
 });
-

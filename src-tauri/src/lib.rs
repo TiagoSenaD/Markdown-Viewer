@@ -7,7 +7,8 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             commands::markdown::parse_markdown,
-            commands::openfile::open_file
+            commands::openfile::open_file,
+            commands::listdir::list_md_files
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
