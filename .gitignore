@@ -1,0 +1,59 @@
+# =========================
+# Pasta de testes Markdown
+# =========================
+Markdown_testes/
+
+# =========================
+# Node.js / Frontend
+# =========================
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =========================
+# Vite
+# =========================
+.vite/
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+
+# =========================
+# Tauri / Rust
+# =========================
+src-tauri/target/
+
+# =========================
+# Ambiente e configurações locais
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Editores e IDEs
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# Sistema Operacional
+# =========================
+.DS_Store
+Thumbs.db
