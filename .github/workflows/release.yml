@@ -41,7 +41,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }} # Usa o nome da sua tag (ex: v0.9.1)
+          tagName: ${{ github.ref_name }}
           releaseName: 'Markdown Viewer ${{ github.ref_name }}'
-          releaseDraft: true # Cria como rascunho para você revisar antes de publicar
+          releaseDraft: true
           prerelease: false
