@@ -407,3 +407,34 @@ body {
   font-size: 0.9rem;
   padding: 40px 20px;
 }
+
+/* ==========================================
+   MERMAID DIAGRAMS
+   ========================================== */
+.mermaid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5em 0;
+  padding: 1.2em;
+  background: #fafaf7;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.mermaid-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-error {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--red);
+  background: rgba(170, 50, 50, 0.06);
+  border: 1px solid rgba(170, 50, 50, 0.2);
+  border-radius: var(--radius);
+  padding: 0.7em 1em;
+  margin: 1em 0;
+}

@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { renderMermaidBlocks } from "./mermaidService";
 
 /**
  * Converte uma string Markdown em HTML usando o backend Rust (pulldown-cmark).
@@ -32,6 +33,9 @@ export async function renderMarkdownFile(fullPath: string): Promise<void> {
         if (renderArea) {
             renderArea.innerHTML = generatedHtml;
             currentFolderPath = folder; // Atualiza a pasta base atual
+
+            // Renderiza diagramas Mermaid presentes no HTML
+            await renderMermaidBlocks(renderArea);
 
             // Garante que o listener de links esteja ativo
             setupLinkInterceptor();
