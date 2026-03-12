@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::Path;
 
-/// Lista todos os arquivos .md dentro de uma pasta (não recursivo).
 #[tauri::command]
 pub fn list_md_files(folder: String) -> Result<Vec<String>, String> {
     let path = Path::new(&folder);
