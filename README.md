@@ -13,6 +13,7 @@ Um leitor de arquivos markdown para desktop, feito com Tauri e Rust.
 ### V1.0.0
 - [ ] Exportar para PDF
 - [ ] Sistema para abrir pastas
+- [ ] incluir coloração de sintaxe nos blocos de código
 - [ ] Correção de erros conhecidos v0.9.0
 
 
@@ -20,6 +21,8 @@ Um leitor de arquivos markdown para desktop, feito com Tauri e Rust.
 - [ ] Falta um botão para voltar para o arquivo pai
 - [ ] Ao abrir um link de um site, ele redireciona pro site
 - [ ] Ao usar um link com sublink, ele não abre o arquivo
+- [ ] linkes de navegação interna não funcionam
+- [ ] metadados são renderizados como texto
 
 
 
