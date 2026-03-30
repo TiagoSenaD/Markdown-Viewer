@@ -21,8 +21,8 @@ Um leitor de arquivos markdown para desktop, feito com Tauri e Rust.
 - [ ] Falta um botão para voltar para o arquivo pai
 - [ ] Ao abrir um link de um site, ele redireciona pro site
 - [ ] Ao usar um link com sublink, ele não abre o arquivo
-- [ ] linkes de navegação interna não funcionam
-- [ ] metadados são renderizados como texto
+- [ ] Linkes de navegação interna não funcionam
+- [x] Metadados são renderizados como texto
 
 
 
